@@ -1,10 +1,10 @@
 <?php
     function db_connect()
     {
-        $servername = 'localhost';
-        $username = 'root';
-        $password = '';
-        $database = 'sbtbsphp';
+        $servername = 'manila-travels.clskvfgtejne.ap-southeast-1.rds.amazonaws.com';
+        $username = 'admin';
+        $password = 'Povm6ZUkAq2NuX';
+        $database = 'manila_travels';
 
         $conn = mysqli_connect($servername, $username, $password, $database);
         return $conn;

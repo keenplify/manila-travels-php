@@ -167,7 +167,7 @@
                         foreach($adminData as $admin)
                         {
                             $adminArr = get_object_vars($admin);
-                            if($adminArr["user_id"] == $user_id) 
+                            if($adminArr["id"] == $user_id) 
                                 continue;
                             $username = $adminArr["user_name"];
                         ?>

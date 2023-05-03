@@ -43,7 +43,7 @@
     $bookingJson = json_encode($arr);
         
     // Admin JSON
-    $adminSql = "SELECT * from users";
+    $adminSql = "SELECT * from administrators";
     $resultAdminSql = mysqli_query($conn, $adminSql);
     $arr = array();
     while($row = mysqli_fetch_assoc($resultAdminSql))
