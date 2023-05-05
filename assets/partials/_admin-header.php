@@ -78,6 +78,11 @@
                     <i class="fas fa-user-lock"></i> Add New Admin        
                     </a>
                 </li>
+                <li class="option <?php if($page=='passenger-validation'){ echo 'active';}?>">
+                    <a href="./passenger-validation.php">
+                    <i class="fas fa-id-card"></i> Passenger Validation       
+                    </a>
+                </li>
             </ul>
         </div>
         <div id="main-content">

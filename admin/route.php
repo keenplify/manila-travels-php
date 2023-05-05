@@ -22,6 +22,9 @@
         require '../assets/styles/admin-options.php';
         $page="route";
     ?>
+    
+    <!-- KEENPLIFY SCRIPTS -->
+    <script src="/node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>
     <!-- Requiring the admin header files -->
@@ -235,6 +238,41 @@
                         <div>
                             <button id="add-button" class="button btn-sm"type="button"data-bs-toggle="modal" data-bs-target="#addModal">Add Route Details <i class="fas fa-plus"></i></button>
                         </div>
+                        <script type="module" defer>
+                            import PureContextMenu from '/node_modules/pure-context-menu/pure-context-menu.min.js';
+
+                            const html = document.querySelector('html')
+
+                            const rows = document.querySelectorAll('tr.ctx-menu')
+
+                            for (const row of rows) {
+                                const routeJSON = row.getAttribute('data-route')
+                                const route = JSON.parse(routeJSON)
+                                
+                                row.addEventListener('contextmenu', event => {
+
+                                    event.preventDefault()
+
+                                    const items = [
+                                    {
+                                        label: "Edit",
+                                        callback: () => {
+                                            document.querySelector(`#btn-${route.id}-edit`)?.click()
+                                            console.log(document.querySelector(`#btn-${route.id}-edit`))
+                                        }
+                                    },
+                                    {
+                                        label: "Delete",
+                                        callback: () => {
+                                            document.querySelector(`#btn-${route.id}-delete`)?.click()
+                                        }
+                                    }
+                                ]
+                                let bodyMenu = new PureContextMenu(html, items)
+                                return false
+                                })
+                            }
+                        </script>
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <th>ID</th>
@@ -243,7 +281,6 @@
                                 <th>Departure Date</th>
                                 <th>Departure Time</th>
                                 <th>Cost</th>
-                                <th>Actions</th>
                             </thead>
                             <?php
                                 while($row = mysqli_fetch_assoc($resultSqlResult))
@@ -259,7 +296,7 @@
                                     $route_step_cost = $row["route_step_cost"];
                                     $bus_no = $row["bus_no"];
                                         ?>
-                                    <tr>
+                                    <tr class="ctx-menu" data-route='<?= json_encode($row) ?>'>
                                         <td>
                                             <?php 
                                                 echo $route_id;
@@ -289,20 +326,25 @@
                                             <?php 
                                                 echo '₱'.$route_step_cost;?>
                                         </td>
-                                        <td>
-                                            <button class="button edit-button " data-link="<?php echo $_SERVER['REQUEST_URI']; ?>" data-id="<?php 
-                                                echo $id;?>" data-location="<?php 
-                                                echo $route_location;?>" data-cost="<?php 
-                                                echo $route_step_cost;?>" data-date="<?php 
-                                                echo $route_dep_date;
-                                            ?>" data-time="<?php 
-                                            echo $route_dep_time;
-                                            ?>" data-busno="<?php 
-                                            echo $bus_no;
-                                            ?>"
+                                        <td style="display: none;">
+                                            <button 
+                                                class="button edit-button "
+                                                data-link="<?php echo $_SERVER['REQUEST_URI']; ?>"
+                                                data-id="<?php echo $id;?>"
+                                                data-location="<?php echo $route_location;?>"
+                                                data-cost="<?php echo $route_step_cost;?>"
+                                                data-date="<?php echo $route_dep_date;?>"
+                                                data-time="<?php  echo $route_dep_time;?>"
+                                                data-busno="<?php echo $bus_no;?>"
+                                                id="btn-<?=$id ?>-edit"
                                             >Edit</button>
-                                            <button class="button delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?php 
-                                                echo $id;?>">Delete</button>
+                                            <button 
+                                                class="button delete-button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                data-id="<?php  echo $id;?>"
+                                                id="btn-<?=$id ?>-delete"
+                                            >Delete</button>
                                         </td>
                                     </tr>
                                 <?php 
