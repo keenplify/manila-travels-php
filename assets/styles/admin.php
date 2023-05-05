@@ -152,4 +152,10 @@
             flex-basis: 20%;
         }
     }
+
+
+    /* KNPLFY */
+    tr.hoverable {
+        cursor: pointer;
+    }
 </style>

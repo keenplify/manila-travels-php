@@ -20,7 +20,11 @@
         require '../assets/styles/admin.php';
         require '../assets/styles/admin-options.php';
         $page="customer";
-    ?>
+        ?>
+        
+    <!-- KEENPLIFY SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/long-press-event@2.4.6/dist/long-press-event.min.js" type="module"></script>
+    <script src="/node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>
     <!-- Requiring the admin header files -->
@@ -100,7 +104,7 @@
                 {
                     $updateSql = "UPDATE `customers` SET
                     `customer_name` = '$cname',
-                    `customer_phone` = '$cphone' WHERE `customers`.`customer_id` = $customer_id";
+                    `customer_phone` = '$cphone' WHERE `customers`.`customer_id` = '$customer_id'";
 
                     $updateResult = mysqli_query($conn, $updateSql);
                     $rowsAffected = mysqli_affected_rows($conn);
@@ -210,6 +214,42 @@
                     <div>
                         <button id="add-button" class="button btn-sm"type="button"data-bs-toggle="modal" data-bs-target="#addModal">Add Customer Details <i class="fas fa-plus"></i></button>
                     </div>
+                    <script type="module" defer>
+                        import PureContextMenu from '/node_modules/pure-context-menu/pure-context-menu.min.js';
+
+                        const html = document.querySelector('html')
+
+                        const rows = document.querySelectorAll('tr.ctx-menu')
+
+                        for (const row of rows) {
+                            const customerJSON = row.getAttribute('data-customer')
+                            const customer = JSON.parse(customerJSON)
+                            row.addEventListener('contextmenu', event => {
+                                console.log(customer)
+
+                                event.preventDefault()
+
+                                const items = [
+                                {
+                                    label: "Edit",
+                                    callback: () => {
+                                        console.log(`#${customer.realCustomerId}-edit-btn`)
+                                        document.querySelector(`#${customer.realCustomerId}-edit-btn`)?.click()
+                                    }
+                                },
+                                {
+                                    label: "Delete",
+                                    callback: () => {
+                                        console.log(`#${customer.realCustomerId}-delete-btn`)
+                                        document.querySelector(`#${customer.realCustomerId}-delete-btn`)?.click()
+                                    }
+                                }
+                            ]
+                            let bodyMenu = new PureContextMenu(html, items)
+                            return false
+                            })
+                        }
+                    </script>
                     <table class="table table-hover table-bordered">
                         <thead>
                             <th>ID</th>
@@ -222,7 +262,6 @@
                             <th>Amount</th>
                             <th>Departure</th>
                             <th>Booked</th>
-                            <th>Actions</th>
                         </thead>
                         <?php
                             while($row = mysqli_fetch_assoc($resultSqlResult))
@@ -258,7 +297,7 @@
             
                                 
                         ?>
-                        <tr>
+                        <tr class="ctx-menu" data-customer='<?= json_encode($row) ?>'>
                             <td>
                                 <?php
                                     echo $customer_id;
@@ -309,14 +348,21 @@
                                     echo $booked_timing;
                                 ?>
                             </td>
-                            <td>
-                            <button class="button edit-button " data-link="<?php echo $_SERVER['REQUEST_URI']; ?>" data-customer_id="<?php 
-                                                echo $customer_id;?>" data-name="<?php 
-                                                echo $customer_name;?>" data-phone="<?php 
-                                                echo $customer_phone;?>"
-                                                >Edit</button>
-                                            <button class="button delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?php 
-                                                echo $id;?>">Delete</button>
+                            <td style="display: none">
+                            <button class="button edit-button " 
+                                data-link="<?php echo $_SERVER['REQUEST_URI']; ?>"
+                                data-customer_id="<?php echo $customer_id;?>"
+                                data-name="<?php echo $customer_name;?>"
+                                data-phone="<?php echo $customer_phone;?>"
+                                id="<?=$customer_id ?>-edit-btn"
+                            >Edit</button>
+                            <button 
+                                class="button delete-button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                data-id="<?php echo $id;?>"
+                                id="<?=$customer_id ?>-delete-btn"
+                            >Delete</button>
                             </td>
                         </tr>
                     <?php 
@@ -362,7 +408,7 @@
         </div>
         <!-- Delete Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" style="z-index: 999;">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-circle"></i></h5>

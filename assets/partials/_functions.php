@@ -1,11 +1,11 @@
 <?php
     function db_connect()
     {
-        $servername = 'manila-travels.clskvfgtejne.ap-southeast-1.rds.amazonaws.com';
-        $username = 'admin';
-        $password = 'Povm6ZUkAq2NuX';
-        $database = 'manila_travels';
-
+        $servername = '109.106.254.51';
+        $username = 'u245395738_manila_travels';
+        $password = '5mJL4pSSeBRDe';
+        $database = 'u245395738_manila_travels';
+        
         $conn = mysqli_connect($servername, $username, $password, $database);
         return $conn;
     }
@@ -39,7 +39,6 @@
     function exist_customers($conn, $name, $phone)
     {
         $sql = "SELECT * FROM `customers` WHERE customer_name='$name' AND customer_phone='$phone'";
-        echo $sql;
 
         $result = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($result);
