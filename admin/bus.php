@@ -22,6 +22,9 @@
         require '../assets/styles/admin-options.php';
         $page="bus";
     ?>
+
+    <!-- KEENPLIFY SCRIPTS -->
+    <script src="../node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>
     <!-- Requiring the admin header files -->
@@ -201,13 +204,41 @@
                     <div>
                         <button id="add-button" class="button btn-sm" type="button"data-bs-toggle="modal" data-bs-target="#addModal">Add Bus Details <i class="fas fa-plus"></i></button>
                     </div>
+
+                    <script type="module" defer>
+                        import PureContextMenu from '../node_modules/pure-context-menu/pure-context-menu.min.js';
+
+                        const html = document.querySelector('html')
+
+                        const rows = document.querySelectorAll('tr.ctx-menu')
+
+                        for (const row of rows) {
+                            const busJSON = row.getAttribute('data-bus')
+                            const bus = JSON.parse(busJSON)
+                            
+                            row.addEventListener('contextmenu', event => {
+                                
+                                event.preventDefault()
+
+                                const items = [
+                                {
+                                    label: "Update",
+                                    callback: () => {
+                                        document.querySelector(`#btn-${bus.id}-update`)?.click()
+                                    }
+                                },
+                            ]
+                            let bodyMenu = new PureContextMenu(html, items)
+                            return false
+                            })
+                        }
+                    </script>
                     
                     <table class="table table-hover table-bordered">
                         <thead>
                             <th>#</th>
                             <th>Plate Number</th>
                             <th>Status</th>
-                            <th>Actions</th>
                         </thead>
                         <?php
                             $ser_no = 0;
@@ -222,7 +253,7 @@
                                 $busno = $row["bus_no"];
                                 $status = $row["status"]; 
                         ?>
-                        <tr>
+                        <tr class="ctx-menu" data-bus='<?= json_encode($row) ?>'>
                             <td>
                                 <?php
                                     echo $ser_no;
@@ -236,13 +267,14 @@
                             <td>
                                 <?php echo $status; ?>
                             </td>
-                            <td>
+                            <td style="display: none">
                             <button 
                                 class="button edit-button"
                                 data-link="<?php echo $_SERVER['REQUEST_URI']; ?>"
                                 data-id="<?php echo $id;?>"
                                 data-busno="<?php echo $busno;?>"
                                 data-status="<?php echo $status; ?>"
+                                id="btn-<?= $id ?>-update"
                             >Update</button>
                             
                 

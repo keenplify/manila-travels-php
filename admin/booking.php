@@ -24,7 +24,7 @@
     ?>
 
      <!-- KEENPLIFY SCRIPTS -->
-     <script src="/node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
+     <script src="../node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>
     <!-- Requiring the admin header files -->
@@ -259,7 +259,7 @@
                         <button id="add-button" class="button btn-sm"type="button"data-bs-toggle="modal" data-bs-target="#addModal">Add Bookings<i class="fas fa-plus"></i></button>
                     </div>
                     <script type="module" defer>
-                        import PureContextMenu from '/node_modules/pure-context-menu/pure-context-menu.min.js';
+                        import PureContextMenu from '../node_modules/pure-context-menu/pure-context-menu.min.js';
 
                         const html = document.querySelector('html')
 
