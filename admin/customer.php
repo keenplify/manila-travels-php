@@ -23,7 +23,6 @@
         ?>
         
     <!-- KEENPLIFY SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/long-press-event@2.4.6/dist/long-press-event.min.js" type="module"></script>
     <script src="/node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>

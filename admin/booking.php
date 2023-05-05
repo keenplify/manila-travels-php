@@ -22,6 +22,9 @@
         require '../assets/styles/admin-options.php';
         $page="booking";
     ?>
+
+     <!-- KEENPLIFY SCRIPTS -->
+     <script src="/node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
 </head>
 <body>
     <!-- Requiring the admin header files -->
@@ -255,6 +258,44 @@
                     <div>
                         <button id="add-button" class="button btn-sm"type="button"data-bs-toggle="modal" data-bs-target="#addModal">Add Bookings<i class="fas fa-plus"></i></button>
                     </div>
+                    <script type="module" defer>
+                        import PureContextMenu from '/node_modules/pure-context-menu/pure-context-menu.min.js';
+
+                        const html = document.querySelector('html')
+
+                        const rows = document.querySelectorAll('tr.ctx-menu')
+
+                        for (const row of rows) {
+                            const bookingJSON = row.getAttribute('data-booking')
+                            const booking = JSON.parse(bookingJSON)
+                            
+                            row.addEventListener('contextmenu', event => {
+
+                                console.log(booking)
+
+                                event.preventDefault()
+
+                                const items = [
+                                {
+                                    label: "Edit",
+                                    callback: () => {
+                                        console.log(`#${booking.customer_id}-edit-btn`)
+                                        document.querySelector(`#${booking.customer_id}-edit-btn`)?.click()
+                                    }
+                                },
+                                {
+                                    label: "Delete",
+                                    callback: () => {
+                                        console.log(`#${booking.customer_id}-delete-btn`)
+                                        document.querySelector(`#${booking.customer_id}-delete-btn`)?.click()
+                                    }
+                                }
+                            ]
+                            let bodyMenu = new PureContextMenu(html, items)
+                            return false
+                            })
+                        }
+                    </script>
                     <table class="table table-hover table-bordered">
                         <thead>
                             <th>PNR</th>
@@ -266,7 +307,6 @@
                             <th>Amount</th>
                             <th>Departure</th>
                             <th>Booked</th>
-                            <th>Actions</th>
                         </thead>
                         <?php
                             while($row = mysqli_fetch_assoc($resultSqlResult))
@@ -298,7 +338,7 @@
 
                                 $booked_timing = $row["booking_created"];
                         ?>
-                        <tr>
+                        <tr class="ctx-menu" data-booking='<?= json_encode($row) ?>'>
                             <td>
                                 <?php 
                                     echo $pnr;
@@ -344,19 +384,25 @@
                                     echo $booked_timing;
                                 ?>
                             </td>
-                            <td>
-                            <button class="button btn-sm edit-button" data-link="<?php echo $_SERVER['REQUEST_URI']; ?>" data-customerid="<?php 
-                                                echo $customer_id;?>" data-id="<?php 
-                                                echo $id;?>" data-name="<?php 
-                                                echo $customer_name;?>" data-phone="<?php 
-                                                echo $customer_phone;?>" >Edit</button>
-                                <button class="button delete-button btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-                                data-id="<?php 
-                                                echo $id;?>" data-bookedseat="<?php 
-                                                echo $booked_seat;
-                                            ?>" data-routeid="<?php 
-                                            echo $route_id;
-                                        ?>"> Delete</button>
+                            <td style="display: none">
+                                <button
+                                    class="button btn-sm edit-button"
+                                    data-link="<?php echo $_SERVER['REQUEST_URI']; ?>"
+                                    data-customerid="<?php echo $customer_id;?>"
+                                    data-id="<?php echo $id;?>"
+                                    data-name="<?php echo $customer_name;?>"
+                                    data-phone="<?php echo $customer_phone;?>"
+                                    id="<?=$customer_id ?>-edit-btn"
+                                >Edit</button>
+                                <button 
+                                    class="button delete-button btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-id="<?php echo $id;?>"
+                                    data-bookedseat="<?php echo $booked_seat;?>"
+                                    data-routeid="<?php echo $route_id;?>"
+                                    id="<?=$customer_id ?>-delete-btn"
+                                > Delete</button>
                             </td>
                         </tr>
                         <?php 
