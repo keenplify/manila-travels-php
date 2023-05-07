@@ -169,7 +169,7 @@
                             $adminArr = get_object_vars($admin);
                             if($adminArr["id"] == $user_id) 
                                 continue;
-                            $username = $adminArr["user_name"];
+                            $username = $adminArr["username"];
                         ?>
                             <div class="info-box admin-item">
                                 <img src="../assets/img/user-profile-min.png" height="100px" alt="Profile Pic">
