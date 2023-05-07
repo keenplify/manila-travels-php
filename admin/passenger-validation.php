@@ -99,7 +99,7 @@
                                         }?>
                                     </td>
                                     <td><?= $row['type'] ?></td>
-                                    <td>
+                                    <td style="display: none">
                                         <?php 
                                             if (isset($row['valid_id_image_url'])) {
                                                 ?>
