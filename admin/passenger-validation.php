@@ -24,8 +24,8 @@
         $page="passenger-validation";
     ?>
 
-    <link href="/node_modules/lightbox2/dist/css/lightbox.min.css" rel="stylesheet" />
-    <script src="/node_modules/lightbox2/dist/js/lightbox-plus-jquery.min.js"></script>
+    <link href="../node_modules/lightbox2/dist/css/lightbox.min.css" rel="stylesheet" />
+    <script src="../node_modules/lightbox2/dist/js/lightbox-plus-jquery.min.js"></script>
 
     <!-- KEENPLIFY SCRIPTS -->
     <script src="../node_modules/pure-context-menu/pure-context-menu.min.js" type="module"></script>
