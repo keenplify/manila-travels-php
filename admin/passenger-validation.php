@@ -115,7 +115,7 @@
                                         ?>
                                         <a 
                                             class="btn btn-sm <?= $isVerified ? 'btn-danger' : 'btn-success' ?>" 
-                                            href="../../server/set-verified.php?id=<?= $row['id'] ?>&is_verified=<?= $isVerified ? 0 : 1 ?>"
+                                            href="./../../server/set-verified.php?id=<?= $row['id'] ?>&is_verified=<?= $isVerified ? 0 : 1 ?>"
                                             id="btn-<?= $row['id'] ?>-verify"
                                         >
                                             <?= $isVerified ? 'Unverify' : 'Verify'?>
